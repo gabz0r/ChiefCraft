@@ -1,5 +1,8 @@
+import network.game.connection.MinecraftConnection;
 import network.http.LoginHandler;
 import minecraft.User;
+import network.util.Constants;
+import network.util.Log;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,8 +13,12 @@ import minecraft.User;
  */
 public class Main {
     public static void main(String[] args) {
-        User u = new User("gabs1994", "xx");
+        User u = User.getUser("gabs1994", "xx");
         LoginHandler.login(u, Constants.LAUNCHER_VERSION);
-        System.out.println(u.getSessionId());
+
+	    Log.log("User logged in: " + User.getUser().getUsername() + ":" + User.getUser().getSessionId());
+
+	    MinecraftConnection mcCon = new MinecraftConnection();
+	    mcCon.connect("gabdev.de", 25565);
     }
 }

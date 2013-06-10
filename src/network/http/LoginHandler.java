@@ -1,10 +1,14 @@
 package network.http;
 
 import minecraft.User;
+import network.util.Http;
+import network.util.Log;
+import network.util.crypto.CryptManager;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
 /**
@@ -15,46 +19,43 @@ import java.net.URL;
  * To change this template use File | Settings | File Templates.
  */
 public class LoginHandler {
-    public static void login(User u,  String version) {
+    public static void login(User u, int version) {
         String parameters = "user=" + u.getUsername() + "&password=" + u.getPassword() + "&version=" + version;
         String loginURL = "https://login.minecraft.net";
 
         try {
-            URL url = new URL(loginURL);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setDoOutput(true);
-            con.setDoInput(true);
-            con.setInstanceFollowRedirects(false);
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            con.setRequestProperty("charset", "utf-8");
-            con.setRequestProperty("Content-Length", Integer.toString(parameters.getBytes().length));
-            con.setUseCaches(false);
-
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(parameters);
-            wr.flush();
-            wr.close();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String fullResponse = br.readLine();
+            String fullResponse = Http.POSTRequest("login.minecraft.net", 80, "", "user=" + u.getUsername() + "&password=" + u.getPassword() + "&version=" + version);
             String[] response = fullResponse.split(":");
 
             if(fullResponse.equals("Bad login")
                     || fullResponse.equals("User not premium")
                     || fullResponse.equals("Account migrated, use e-mail")
                     || response.length != 5) {
-                System.out.println("Login failed");
+	            Log.error("Login failed");
                 System.exit(1);
             }
 
             u.setSessionId(response[3]);
             u.setUid(response[4]);
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+	        Log.error("Login failed");
         }
     }
+
+	public static void joinServer(byte[] serverhash) {
+		try {
+			Http.GETRequest("session.minecraft.net", 80, "game/joinserver.jsp",
+					"user=" + User.getUser().getUsername() +
+					"&sessionId=" + User.getUser().getSessionId() +
+					"&serverId=" + CryptManager.getHexString(serverhash));
+
+		} catch (MalformedURLException e) {
+			Log.error("Joining failed" + e.getMessage());
+		} catch (ProtocolException e) {
+			Log.error("Joining failed" + e.getMessage());
+		} catch (IOException e) {
+			Log.error("Joining failed" + e.getMessage());
+		}
+	}
 }

@@ -1,3 +1,5 @@
+package network.util;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Gabriel
@@ -6,6 +8,6 @@
  * To change this template use File | Settings | File Templates.
  */
 public class Constants {
-    public static final String LAUNCHER_VERSION = "14";
-    public static final String PROTOCOL_VERSION = "61";
+    public static final int LAUNCHER_VERSION = 14;
+    public static final int PROTOCOL_VERSION = 61;
 }

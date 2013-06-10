@@ -1,4 +1,4 @@
-package network.game.Packet;
+package network.game.packet;
 
 /**
  * Created with IntelliJ IDEA.
