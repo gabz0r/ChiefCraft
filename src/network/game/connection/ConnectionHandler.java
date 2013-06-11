@@ -1,10 +1,7 @@
 package network.game.connection;
 
 import minecraft.User;
-import network.game.packet.classes.Packet;
-import network.game.packet.classes.Packet252SharedKey;
-import network.game.packet.classes.Packet253ServerAuthData;
-import network.game.packet.classes.Packet2ClientProtocol;
+import network.game.packet.classes.*;
 import network.http.LoginHandler;
 import network.util.Constants;
 import network.util.Log;
@@ -23,9 +20,9 @@ import java.security.PublicKey;
  * To change this template use File | Settings | File Templates.
  */
 public class ConnectionHandler extends Thread {
-	Socket connectedSocket;
-	DataOutputStream out;
-	DataInputStream in;
+	private Socket connectedSocket;
+	private DataOutputStream out;
+	private DataInputStream in;
 
 	public ConnectionHandler(Socket mcs) {
 		try {
@@ -46,9 +43,15 @@ public class ConnectionHandler extends Thread {
 				Packet current = Packet.getNewPacket(opcode);
 				if(current != null) {
 					current.readPacketData(in);
-					current.processPacket();
 
-					Log.log(current.toString());
+                    //Handle keepalive packets directly
+                    if(current instanceof Packet0KeepAlive) {
+                        out.write(0);
+                        current.writePacketData(out);
+                    }
+
+                    //Log.log(current.toString());
+                    current.processPacket();
 				}
 			}
 		} catch (IOException e) {
@@ -102,4 +105,12 @@ public class ConnectionHandler extends Thread {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		}
 	}
+
+    public DataOutputStream getOut() {
+        return out;
+    }
+
+    public DataInputStream getIn() {
+        return in;
+    }
 }

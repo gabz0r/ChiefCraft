@@ -1,5 +1,7 @@
 package network.game.packet.classes;
 
+import minecraft.actions.Chat;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -57,6 +59,7 @@ public class Packet3Chat extends Packet
      */
     public void processPacket()
     {
+        Chat.receiveChatMessage(this);
     }
 
     /**

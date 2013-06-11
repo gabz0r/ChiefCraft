@@ -1,5 +1,7 @@
 package network.game.packet.classes;
 
+import minecraft.actions.PlayerList;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -47,6 +49,7 @@ public class Packet201PlayerInfo extends Packet
      */
     public void processPacket()
     {
+        PlayerList.updateTabList(this);
     }
 
     /**

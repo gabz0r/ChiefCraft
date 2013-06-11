@@ -1,5 +1,8 @@
 package network.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Gabriel
@@ -9,9 +12,9 @@ package network.util;
  */
 public class Log {
 	public static void log(String msg) {
-		System.out.println("LOG >> " + msg);
+		System.out.println("LOG [" + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) + "] >> " + msg);
 	}
 	public static void error(String msg) {
-		System.out.println("ERROR >> " + msg);
+		System.out.println("ERROR [" + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) + "] >> " + msg);
 	}
 }

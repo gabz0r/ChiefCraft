@@ -13,17 +13,22 @@ import java.net.Socket;
  * To change this template use File | Settings | File Templates.
  */
 public class MinecraftConnection {
-	Socket mcSocket;
+	private Socket mcSocket;
+    private static ConnectionHandler handler;
 
 	public void connect(String host, int port) {
 		try {
 			mcSocket = new Socket(host, port);
 			Log.log("Connected to server!");
-			ConnectionHandler ch = new ConnectionHandler(mcSocket);
-			ch.start();
+			handler = new ConnectionHandler(mcSocket);
+			handler.start();
 
 		} catch (IOException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		}
 	}
+
+    public static ConnectionHandler getHandler() {
+        return handler;
+    }
 }

@@ -1,5 +1,8 @@
 package network.game.packet.classes;
 
+import minecraft.Player;
+import minecraft.User;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -74,12 +77,16 @@ public class Packet1Login extends Packet {
      * Passes this Packet on to the NetHandler for processing.
      */
     public void processPacket() {
+        Player.getPlayer().setEntityID(clientEntityId);
+        Player.getPlayer().setName(User.getUser().getUsername());
+        /*
         System.out.println("- Entity ID " + clientEntityId);
         System.out.println("- Difficulty " + difficultySetting);
         System.out.println("- Dimension " + dimension);
         System.out.println("- Game Type " + gameType);
         System.out.println("- Hardcore? " + hardcoreMode);
         System.out.println("- Max Players " + maxPlayers);
+        */
     }
 
     /**
