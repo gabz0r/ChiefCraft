@@ -19,7 +19,7 @@ import java.net.URL;
  * To change this template use File | Settings | File Templates.
  */
 public class LoginHandler {
-    public static void login(User u, int version) {
+    public static boolean login(User u, int version) {
         String parameters = "user=" + u.getUsername() + "&password=" + u.getPassword() + "&version=" + version;
         String loginURL = "https://login.minecraft.net";
 
@@ -32,7 +32,7 @@ public class LoginHandler {
                     || fullResponse.equals("Account migrated, use e-mail")
                     || response.length != 5) {
 	            Log.error("Login failed");
-                System.exit(1);
+                return false;
             }
 
             u.setSessionId(response[3]);
@@ -40,7 +40,10 @@ public class LoginHandler {
 
         } catch (IOException e) {
 	        Log.error("Login failed");
+            return false;
         }
+
+        return false;
     }
 
 	public static void joinServer(byte[] serverhash) {

@@ -3,6 +3,7 @@ import network.http.LoginHandler;
 import minecraft.User;
 import network.util.Constants;
 import network.util.Log;
+import ui.LoginForm;
 import ui.MainForm;
 
 import javax.swing.*;
@@ -23,7 +24,7 @@ public class Main {
         //<editor-fold desc="Benutzername & Passwort">
         User u = User.getUser("user", "pw");
         //</editor-fold>
-
+        LoginForm.getLoginForm();
         LoginHandler.login(u, Constants.LAUNCHER_VERSION);
 
 	    Log.log("User logged in: " + User.getUser().getUsername() + ":" + User.getUser().getSessionId());
